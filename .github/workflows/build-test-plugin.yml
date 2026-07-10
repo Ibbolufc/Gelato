@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - agent/multi-addon-support
+      - main
     paths:
       - GelatoStremioProvider.cs
       - Config/**
@@ -20,10 +20,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out multi-addon branch
+      - name: Check out main branch
         uses: actions/checkout@v4
-        with:
-          ref: agent/multi-addon-support
 
       - name: Set up .NET 9
         uses: actions/setup-dotnet@v4
