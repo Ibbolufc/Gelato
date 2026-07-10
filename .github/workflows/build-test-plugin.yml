@@ -1,0 +1,60 @@
+name: Build Test Plugin
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/multi-addon-support
+    paths:
+      - GelatoStremioProvider.cs
+      - Config/**
+      - Gelato.csproj
+      - build.yaml
+      - .github/workflows/build-test-plugin.yml
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out multi-addon branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/multi-addon-support
+
+      - name: Set up .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore and build
+        run: |
+          dotnet restore Gelato.csproj
+          dotnet build Gelato.csproj --configuration Release --no-restore
+
+      - name: Package Jellyfin plugin
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="bin/Release/net9.0"
+          PACKAGE="package/Gelato_0.26.15.1-multi-addon-test"
+          mkdir -p "$PACKAGE"
+
+          cp "$OUT/Gelato.dll" "$PACKAGE/"
+          cp "$OUT/Mono.Nat.dll" "$PACKAGE/"
+          cp "$OUT/MonoTorrent"*.dll "$PACKAGE/"
+          cp "$OUT/ReusableTasks.dll" "$PACKAGE/"
+
+          cd package
+          zip -r ../Gelato-Universal-MultiAddon-Test.zip "Gelato_0.26.15.1-multi-addon-test"
+
+      - name: Upload installable ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: Gelato-Universal-MultiAddon-Test
+          path: Gelato-Universal-MultiAddon-Test.zip
+          if-no-files-found: error
+          retention-days: 30
