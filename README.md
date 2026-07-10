@@ -28,7 +28,7 @@ Bring the power of Stremio addons directly into Jellyfin. This plugin replaces J
 
 ## Usage
 
-1. Setup an aiostreams manifest. You can selfhost or use an public instance, for example: [Elfhosted public instance](https://aiostreams.elfhosted.com/stremio/configure)
+1. Configure one or more ordinary Stremio addon manifest URLs. Put a search/metadata addon such as Cinemeta first, then add any stream or subtitle addons on separate lines. AIOStreams remains optional.
    
    If you are new to debrid and are signing up please use one of my <a href="https://github.com/lostb1t/Gelato?tab=readme-ov-file#support-me">referrals</a>.
    
@@ -38,7 +38,7 @@ Bring the power of Stremio addons directly into Jellyfin. This plugin replaces J
 2. Make sure you are running Jellyfin 10.11 and add `https://raw.githubusercontent.com/lostb1t/Gelato/refs/heads/gh-pages/repository.json` to your plugin repositories.
 
 3. Install and configure the plugin.
-   **Note:** Only **AIOStreams** is supported.
+   **Note:** Standard Stremio addons and AIOStreams manifests are supported.
 
 4. Add the configured base paths to the Jellyfin library of your choice. After adding them, start a library scan.
 
@@ -51,7 +51,7 @@ For a more in depth guide see [starter guide](https://github.com/lostb1t/Gelato/
 
 ## Notes
 
-- Only **AIOStreams** is supported
+- Supports multiple standard Stremio addons, with AIOStreams remaining optional
 
 ### FAQ
 

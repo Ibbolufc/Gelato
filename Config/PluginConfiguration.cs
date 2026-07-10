@@ -34,14 +34,25 @@ public class PluginConfiguration : BasePluginConfiguration
     public string GetBaseUrl()
     {
         if (string.IsNullOrWhiteSpace(Url))
-            throw new InvalidOperationException("Gelato Url not configured.");
+            throw new InvalidOperationException("No Stremio addon URLs are configured.");
 
-        var u = Url.Trim().TrimEnd('/');
+        var urls = Url
+            .Split(new[] { '\r', '\n', ';' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(value =>
+            {
+                var url = value.Trim().TrimEnd('/');
+                if (url.EndsWith("/manifest.json", StringComparison.OrdinalIgnoreCase))
+                    url = url[..^"/manifest.json".Length];
+                return url.TrimEnd('/');
+            })
+            .Where(value => !string.IsNullOrWhiteSpace(value))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
 
-        if (u.EndsWith("/manifest.json", StringComparison.OrdinalIgnoreCase))
-            u = u[..^"/manifest.json".Length];
+        if (urls.Count == 0)
+            throw new InvalidOperationException("No valid Stremio addon URLs are configured.");
 
-        return u;
+        return string.Join("\n", urls);
     }
 
     [JsonIgnore]

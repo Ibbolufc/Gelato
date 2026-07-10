@@ -38,10 +38,9 @@
             <h3 class="sectionTitle">General Settings</h3>
 
             <div class="inputContainer">
-              <label class="inputLabel inputLabelUnfocused" for="txtUrl">AIOStreams URL (manifest or base):</label>
-              <input is="emby-input" type="text" id="txtUrl" required="required" class="emby-input" />
-              <div class="fieldDescription">Paste the manifest URL or base endpoint. <code>GetBaseUrl()</code> will
-                strip <code>/manifest.json</code> automatically.</div>
+              <label class="inputLabel inputLabelUnfocused" for="txtUrl">Stremio addon URLs (one per line, metadata/search first):</label>
+              <textarea is="emby-textarea" id="txtUrl" required="required" class="emby-textarea" rows="7"></textarea>
+              <div class="fieldDescription">Enter one addon manifest/base URL per line. Put Cinemeta or another search/meta addon first, followed by any stream and subtitle addons. <code>/manifest.json</code> is stripped automatically.</div>
             </div>
 
             <div class="inputContainer">
@@ -206,8 +205,8 @@
             <div id="userOverrideContainer"
               style="display:none; margin-top:1em; padding: 1em; background: rgba(0,0,0,0.1); border-radius: 4px;">
               <div class="inputContainer">
-                <label class="inputLabel" for="txtUserUrl">AIOStreams URL:</label>
-                <input is="emby-input" type="text" id="txtUserUrl" class="emby-input" />
+                <label class="inputLabel" for="txtUserUrl">Stremio addon URLs:</label>
+                <textarea is="emby-textarea" id="txtUserUrl" class="emby-textarea" rows="6"></textarea>
               </div>
 
               <div class="inputContainer">
