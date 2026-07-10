@@ -1,4 +1,4 @@
-name: Build Test Plugin
+name: Publish Jellyfin Test Repository
 
 on:
   workflow_dispatch:
@@ -10,17 +10,23 @@ on:
       - Config/**
       - Gelato.csproj
       - build.yaml
+      - README.md
       - .github/workflows/build-test-plugin.yml
 
 permissions:
-  contents: read
+  contents: write
+
+env:
+  PLUGIN_VERSION: "0.26.15.2"
+  TARGET_ABI: "10.11.6.0"
+  PACKAGE_NAME: "gelato_0.26.15.2.zip"
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out main branch
+      - name: Check out main
         uses: actions/checkout@v4
 
       - name: Set up .NET 9
@@ -33,26 +39,78 @@ jobs:
           dotnet restore Gelato.csproj
           dotnet build Gelato.csproj --configuration Release --no-restore
 
-      - name: Package Jellyfin plugin
+      - name: Package plugin and create repository feed
         shell: bash
         run: |
           set -euo pipefail
+
           OUT="bin/Release/net9.0"
-          PACKAGE="package/Gelato_0.26.15.1-multi-addon-test"
-          mkdir -p "$PACKAGE"
+          STAGE="package/Gelato"
+          PUBLISH="publish"
 
-          cp "$OUT/Gelato.dll" "$PACKAGE/"
-          cp "$OUT/Mono.Nat.dll" "$PACKAGE/"
-          cp "$OUT/MonoTorrent"*.dll "$PACKAGE/"
-          cp "$OUT/ReusableTasks.dll" "$PACKAGE/"
+          mkdir -p "$STAGE" "$PUBLISH"
 
-          cd package
-          zip -r ../Gelato-Universal-MultiAddon-Test.zip "Gelato_0.26.15.1-multi-addon-test"
+          cp "$OUT/Gelato.dll" "$STAGE/"
+          cp "$OUT/Mono.Nat.dll" "$STAGE/"
+          cp "$OUT/MonoTorrent"*.dll "$STAGE/"
+          cp "$OUT/ReusableTasks.dll" "$STAGE/"
 
-      - name: Upload installable ZIP
+          (
+            cd "$STAGE"
+            zip -r "../../$PUBLISH/$PACKAGE_NAME" .
+          )
+
+          CHECKSUM=$(md5sum "$PUBLISH/$PACKAGE_NAME" | awk '{print $1}')
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          python3 - "$CHECKSUM" "$TIMESTAMP" <<'PY'
+          import json
+          import os
+          import sys
+
+          checksum, timestamp = sys.argv[1], sys.argv[2]
+          version = os.environ["PLUGIN_VERSION"]
+          target_abi = os.environ["TARGET_ABI"]
+          package_name = os.environ["PACKAGE_NAME"]
+
+          repository = [
+              {
+                  "category": "General",
+                  "description": "Jellyfin integration for multiple standard Stremio addons.",
+                  "guid": "94EA4E14-8163-4989-96FE-0A2094BC2D6A",
+                  "name": "Gelato Universal",
+                  "overview": "Use standard Stremio addons directly in Jellyfin.",
+                  "owner": "Ibbolufc",
+                  "versions": [
+                      {
+                          "changelog": "Initial multi-addon test build. Supports separate metadata, stream and subtitle addons without requiring AIOStreams.",
+                          "checksum": checksum,
+                          "sourceUrl": f"https://raw.githubusercontent.com/Ibbolufc/Gelato/gh-pages/{package_name}",
+                          "targetAbi": target_abi,
+                          "timestamp": timestamp,
+                          "version": version,
+                      }
+                  ],
+              }
+          ]
+
+          with open("publish/repository.json", "w", encoding="utf-8") as handle:
+              json.dump(repository, handle, indent=2)
+              handle.write("\n")
+          PY
+
+      - name: Upload test ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: Gelato-Universal-MultiAddon-Test
-          path: Gelato-Universal-MultiAddon-Test.zip
+          name: Gelato-Universal-0.26.15.2
+          path: publish/gelato_0.26.15.2.zip
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish Jellyfin repository
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./publish
+          force_orphan: true
