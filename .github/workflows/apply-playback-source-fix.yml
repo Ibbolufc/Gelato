@@ -1,6 +1,7 @@
 name: Apply Playback Source Fix
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
