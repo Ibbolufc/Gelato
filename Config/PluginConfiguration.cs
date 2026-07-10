@@ -37,8 +37,7 @@ public class PluginConfiguration : BasePluginConfiguration
             throw new InvalidOperationException("No Stremio addon URLs are configured.");
 
         var urls = Url
-            .Split(new[] { '', '
-', ';' }, StringSplitOptions.RemoveEmptyEntries)
+            .Split(new[] { '\r', '\n', ';' }, StringSplitOptions.RemoveEmptyEntries)
             .Select(value =>
             {
                 var url = value.Trim().TrimEnd('/');
@@ -53,8 +52,7 @@ public class PluginConfiguration : BasePluginConfiguration
         if (urls.Count == 0)
             throw new InvalidOperationException("No valid Stremio addon URLs are configured.");
 
-        return string.Join("
-", urls);
+        return string.Join("\n", urls);
     }
 
     [JsonIgnore]
