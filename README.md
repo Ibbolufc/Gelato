@@ -1,70 +1,191 @@
-> [!NOTE]
-> Looking for the next evolution of Gelato?
-> Check out [Remux](https://github.com/lostb1t/remux). A Rust-based media server designed as a full replacement for Jellyfin rather than a plugin. It supports local libraries, remote sources, Stremio addons, and works with existing Jellyfin clients.
-
 <div align="center">
-   <img width="125" src="logo.png" alt="Logo">
+   <img width="125" src="logo.png" alt="Gelato logo">
 </div>
 
 <div align="center">
-  <h1><b>Gelato</b></h1>
-  <p><i>Jellyfin Stremio Integration Plugin</i></p>
+  <h1><b>Gelato Universal</b></h1>
+  <p><i>Use ordinary Stremio addons directly inside Jellyfin</i></p>
 </div>
 
-Bring the power of Stremio addons directly into Jellyfin. This plugin replaces Jellyfin’s default search with Stremio-powered results and can automatically import entire catalogs into your library through scheduled tasks, seamlessly injecting them into Jellyfin’s database so they behave like native items.
+> [!WARNING]
+> This is an early multi-addon test build. Test it before using it on a production Jellyfin server.
 
-<a href="https://discord.gg/rEbhk4RBhs">
-    <img src="https://img.shields.io/badge/Talk%20on-Discord-brightgreen">
-</a>
+Gelato Universal is a fork of [lostb1t/Gelato](https://github.com/lostb1t/Gelato). It keeps Gelato's Jellyfin integration while removing the requirement to place every provider behind AIOStreams.
 
-### Features
-- **Unified Search** – Jellyfin search now pulls results from Stremio addons
-- **Catalogs** – Import items from stremio catalogs into your library with scheduled tasks
-- **Realtime Streaming** – Streams are resolved on demand and play instantly
-- **Database Integration** – Stremio items appear like native Jellyfin items
-- **Act as an proxy** - Streams are proxied through Jellyfin, so debrid sees everything as a single IP.
-- **Per user settings** - Users can have their own manifest, perfect for age restricted accounts.
-- **More Content, Less Hassle** – Expand Jellyfin with community-driven Stremio catalogs
+You can configure separate Stremio addons for metadata, catalogs, streams and subtitles. AIOStreams still works, but it is optional.
 
-## Usage
+## Features
 
-1. Configure one or more ordinary Stremio addon manifest URLs. Put a search/metadata addon such as Cinemeta first, then add any stream or subtitle addons on separate lines. AIOStreams remains optional.
-   
-   If you are new to debrid and are signing up please use one of my <a href="https://github.com/lostb1t/Gelato?tab=readme-ov-file#support-me">referrals</a>.
-   
-   At minimum you need the **tmdb addon enabled** for search and one addon that provides streams (comet for example).
-   Alternative you can import the [starter config](aiostreams-config.json). Remember to enable your debrid providers under services after importing the config.
+- Jellyfin search powered by a standard Stremio metadata addon
+- Multiple ordinary Stremio stream addons queried at the same time
+- Multiple subtitle addons
+- Automatic manifest capability detection
+- Stream deduplication and addon labelling
+- Catalog import support
+- Per-user addon configurations
+- Direct HTTP streams and `infoHash`/`fileIdx` torrent responses
+- Streams proxied through Jellyfin
 
-2. Make sure you are running Jellyfin 10.11 and add `https://raw.githubusercontent.com/lostb1t/Gelato/refs/heads/gh-pages/repository.json` to your plugin repositories.
+## Requirements
 
-3. Install and configure the plugin.
-   **Note:** Standard Stremio addons and AIOStreams manifests are supported.
+- Jellyfin **10.11.6**
+- A search/metadata addon such as Cinemeta
+- At least one stream addon
+- Two empty folders for Gelato's Movies and Shows libraries
 
-4. Add the configured base paths to the Jellyfin library of your choice. After adding them, start a library scan.
+## Install from the Jellyfin dashboard
 
-4.5 For shows, enable the "Gelato missing season/episode fetcher" and put
-it on too of the metadata downloaders.
+### 1. Remove the original Gelato source for a clean test
 
-5. Profit! Now search for your favorite movie and start streaming. Or run the catalog import task to populate your db.
+If you already installed the original Gelato plugin, uninstall it and restart Jellyfin first.
 
-For a more in depth guide see [starter guide](https://github.com/lostb1t/Gelato/discussions/40)
+In Jellyfin go to:
 
-## Notes
+```text
+Dashboard → Plugins → Repositories
+```
 
-- Supports multiple standard Stremio addons, with AIOStreams remaining optional
+Remove the original Gelato repository URL while testing this fork. The two builds use the same plugin identity and should not be installed together.
 
-### FAQ
+### 2. Add this repository
 
-- You need to restart the server after editing the manifest/config in aiostreams.
-- You should have at least one search enabled catalog. I suggest the tmdb addon.
-- if something borked or you want to start over, you can use the purge task under scheduled tasks.
-- I suggest lowering the default timeout on your stremio addons in aiostreams (5 seconds for example)
-- debridio tmdb and debridio tvdb are pronlematic. I suggest using the regular tmdb addon.
-- Stream cache can be cleared by restarting the server
+Add a repository with these details:
 
-### ❤️ Support the Project
+```text
+Name: Gelato Universal
+URL: https://raw.githubusercontent.com/Ibbolufc/Gelato/gh-pages/repository.json
+```
 
-- ⭐ **[Star the repository](https://github.com/lostb1t/Gelato)** on GitHub.
-- 🤝 **Contribute**: Report issues, suggest features, or submit pull requests.
-- ☕ **Donate**:
-  - **[Ko-fi](https://ko-fi.com/lostb1t)**
+Save it.
+
+### 3. Install the plugin
+
+Go to:
+
+```text
+Dashboard → Plugins → Catalog
+```
+
+Open **Gelato Universal**, install the latest version, then restart Jellyfin.
+
+## Configure the addons
+
+Open:
+
+```text
+Dashboard → Plugins → My Plugins → Gelato Universal
+```
+
+In the addon URL field, enter one manifest URL per line.
+
+Example:
+
+```text
+https://v3-cinemeta.strem.io/manifest.json
+https://dragon.valyria.win/manifest.json
+```
+
+Keep the metadata/search addon first. Stream-only addons cannot provide Jellyfin search results.
+
+You can add more providers underneath:
+
+```text
+https://v3-cinemeta.strem.io/manifest.json
+https://first-stream-addon.example/manifest.json
+https://second-stream-addon.example/manifest.json
+https://subtitle-addon.example/manifest.json
+```
+
+Save the configuration and restart Jellyfin after changing the addon list.
+
+## Create the Jellyfin libraries
+
+Create two empty folders that Jellyfin can access. Docker users must ensure the folders exist inside the container through a volume mount.
+
+Example container paths:
+
+```text
+/config/gelato/movies
+/config/gelato/series
+```
+
+Enter those same paths in the Gelato configuration page.
+
+Then add two Jellyfin libraries:
+
+### Movies
+
+```text
+Dashboard → Libraries → Add Media Library
+Content type: Movies
+Folder: /config/gelato/movies
+```
+
+### Shows
+
+```text
+Dashboard → Libraries → Add Media Library
+Content type: Shows
+Folder: /config/gelato/series
+```
+
+For the Shows library, enable **Gelato missing season/episode fetcher** and move it to the top of the metadata downloader list.
+
+Save both libraries and run **Scan All Libraries**.
+
+## Test the full flow
+
+1. Search Jellyfin for a well-known movie.
+2. Confirm the poster, title and description appear.
+3. Open the movie and start playback.
+4. Confirm streams from the configured stream addon appear.
+5. Test pause, resume and seeking.
+6. Search for a television series.
+7. Confirm seasons and episodes load.
+8. Play an episode and test seeking again.
+9. Add a second stream addon and confirm results from both providers appear without duplicates.
+
+## Troubleshooting
+
+### The repository does not appear in Jellyfin
+
+Open this URL in a browser:
+
+```text
+https://raw.githubusercontent.com/Ibbolufc/Gelato/gh-pages/repository.json
+```
+
+It should display JSON. The publishing workflow may still be running if the file is not available yet.
+
+### Search returns no results
+
+- Keep Cinemeta or another searchable metadata addon first.
+- Make sure remote search is enabled in Gelato.
+- Restart Jellyfin after editing the addon list.
+- Confirm the Movies and Shows libraries exist.
+
+### A movie appears but has no streams
+
+Open each stream addon's `manifest.json` URL in a browser and confirm it returns JSON. Then check the latest Jellyfin server log for `Gelato`, `Stremio`, `HTTP` or `timeout`.
+
+### Series appear without seasons or episodes
+
+Edit the Shows library and confirm **Gelato missing season/episode fetcher** is enabled and placed first. Then scan the library again.
+
+## Current limitations
+
+- `behaviorHints.proxyHeaders` are not yet adapted to Jellyfin playback.
+- YouTube IDs, external URLs, NZB sources and archive-backed streams are not yet supported.
+- Direct HTTP streams and torrent `infoHash` responses are the initial supported playback types.
+
+## Manual test build
+
+Every change to `main` builds automatically under GitHub Actions. The latest workflow also provides a downloadable ZIP artifact for manual installation.
+
+```text
+Actions → Publish Jellyfin Test Repository → latest successful run → Artifacts
+```
+
+## Credits and licence
+
+This project is based on [lostb1t/Gelato](https://github.com/lostb1t/Gelato) and remains licensed under GPLv3. Original copyright and licence notices are retained.
