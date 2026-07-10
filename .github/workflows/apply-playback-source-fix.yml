@@ -1,0 +1,101 @@
+name: Apply Playback Source Fix
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/apply-playback-source-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+
+      - name: Fix Gelato virtual source selection and bump version
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          provider = Path('Decorators/MediaSourceManagerDecorator.cs')
+          text = provider.read_text(encoding='utf-8')
+
+          old = '''        sources.AddRange(gelatoSources);
+
+        if (sources.Count > 1)
+        {
+            // remove primary from list when there are streams
+            sources = sources
+                .Where(k =>
+                    !(k.Path?.StartsWith("gelato", StringComparison.OrdinalIgnoreCase) ?? false)
+                )
+                .Where(k =>
+                    !(k.Path?.StartsWith("stremio", StringComparison.OrdinalIgnoreCase) ?? false)
+                )
+                .ToList();
+        }
+'''
+
+          new = '''        sources.AddRange(gelatoSources);
+
+        if (item.IsGelato() && gelatoSources.Count > 0)
+        {
+            // Gelato library items use a temporary .strm file only as a database placeholder.
+            // Never offer that placeholder to Jellyfin for playback when real addon streams exist.
+            sources = gelatoSources;
+        }
+        else if (sources.Count > 1)
+        {
+            // Remove legacy virtual sources while retaining genuine local sources in mixed mode.
+            sources = sources
+                .Where(k =>
+                    !(k.Path?.StartsWith("gelato", StringComparison.OrdinalIgnoreCase) ?? false)
+                )
+                .Where(k =>
+                    !(k.Path?.StartsWith("stremio", StringComparison.OrdinalIgnoreCase) ?? false)
+                )
+                .ToList();
+        }
+'''
+
+          if old not in text:
+              raise SystemExit('Expected media-source block was not found')
+
+          provider.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          replacements = {
+              Path('build.yaml'): [('version: "0.26.15.2"', 'version: "0.26.15.3"')],
+              Path('Gelato.csproj'): [('<Version>0.26.15.2</Version>', '<Version>0.26.15.3</Version>')],
+              Path('.github/workflows/build-test-plugin.yml'): [
+                  ('PLUGIN_VERSION: "0.26.15.2"', 'PLUGIN_VERSION: "0.26.15.3"'),
+                  ('PACKAGE_NAME: "gelato_0.26.15.2.zip"', 'PACKAGE_NAME: "gelato_0.26.15.3.zip"'),
+                  ('Gelato-Universal-0.26.15.2', 'Gelato-Universal-0.26.15.3'),
+                  ('publish/gelato_0.26.15.2.zip', 'publish/gelato_0.26.15.3.zip'),
+              ],
+          }
+
+          for path, pairs in replacements.items():
+              value = path.read_text(encoding='utf-8')
+              for before, after in pairs:
+                  if before not in value:
+                      raise SystemExit(f'Expected version string not found in {path}: {before}')
+                  value = value.replace(before, after)
+              path.write_text(value, encoding='utf-8')
+          PY
+
+          rm .github/workflows/apply-playback-source-fix.yml
+
+      - name: Commit playback fix
+        shell: bash
+        run: |
+          git config user.name "Gelato Universal Automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add Decorators/MediaSourceManagerDecorator.cs build.yaml Gelato.csproj .github/workflows/build-test-plugin.yml .github/workflows/apply-playback-source-fix.yml
+          git commit -m "Fix virtual strm source selected for playback"
+          git push origin main
