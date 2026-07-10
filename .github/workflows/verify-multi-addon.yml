@@ -1,0 +1,66 @@
+name: Verify multi-addon build
+
+on:
+  push:
+    branches:
+      - agent/multi-addon-support
+    paths:
+      - .github/workflows/verify-multi-addon.yml
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out development branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/multi-addon-support
+          fetch-depth: 0
+
+      - name: Set up .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore and build
+        id: build
+        shell: bash
+        run: |
+          set +e
+          dotnet restore Gelato.csproj > /tmp/multi-addon-build.log 2>&1
+          result=$?
+          if [ "$result" -eq 0 ]; then
+            dotnet build Gelato.csproj --configuration Release --no-restore >> /tmp/multi-addon-build.log 2>&1
+            result=$?
+          fi
+          set -e
+
+          if [ "$result" -eq 0 ]; then
+            status="SUCCESS"
+          else
+            status="FAILED"
+          fi
+
+          {
+            echo "# Multi-addon build result"
+            echo
+            echo "Status: **$status**"
+            echo
+            echo "Commit tested: \`$(git rev-parse HEAD)\`"
+            echo
+            echo '```text'
+            tail -n 250 /tmp/multi-addon-build.log
+            echo '```'
+          } > BUILD-RESULT.md
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BUILD-RESULT.md
+          git commit -m "Record multi-addon build result"
+          git push origin HEAD:agent/multi-addon-support
+
+          exit "$result"
