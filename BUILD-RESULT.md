@@ -2,46 +2,32 @@
 
 Status: **FAILED**
 
-Commit tested: `119394c49cc1315070db7f8a02f082055e88cf1f`
+Commit tested: `9f32df29af5b4f8a0550c9be451084d0234772b5`
 
 ```text
   Determining projects to restore...
-  Restored /home/runner/work/Gelato/Gelato/Gelato.csproj (in 2.66 sec).
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(40,28): error CS1010: Newline in constant [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(40,28): error CS1011: Empty character literal [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(40,29): error CS1003: Syntax error, ',' expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(41,1): error CS1012: Too many characters in character literal [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(41,5): error CS1003: Syntax error, ',' expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(42,1): error CS1012: Too many characters in character literal [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(42,5): error CS1513: } expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(42,5): error CS1026: ) expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(42,6): error CS1010: Newline in constant [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(42,6): error CS1012: Too many characters in character literal [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(57,28): error CS1010: Newline in constant [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(57,29): error CS1003: Syntax error, ',' expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(58,1): error CS1010: Newline in constant [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(58,10): error CS1026: ) expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(58,10): error CS1002: ; expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+  Restored /home/runner/work/Gelato/Gelato/Gelato.csproj (in 2.65 sec).
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(777,17): error CS0246: The type or namespace name 'StremioTrailer' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(778,17): error CS0246: The type or namespace name 'StremioLink' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Common.cs(472,26): warning CS8601: Possible null reference assignment. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(809,17): error CS0246: The type or namespace name 'StremioTrailerStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(812,12): error CS0246: The type or namespace name 'StremioAppExtras' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(368,28): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(390,29): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(422,45): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
 
 Build FAILED.
 
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(40,28): error CS1010: Newline in constant [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(40,28): error CS1011: Empty character literal [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(40,29): error CS1003: Syntax error, ',' expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(41,1): error CS1012: Too many characters in character literal [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(41,5): error CS1003: Syntax error, ',' expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(42,1): error CS1012: Too many characters in character literal [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(42,5): error CS1513: } expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(42,5): error CS1026: ) expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(42,6): error CS1010: Newline in constant [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(42,6): error CS1012: Too many characters in character literal [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(57,28): error CS1010: Newline in constant [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(57,29): error CS1003: Syntax error, ',' expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(58,1): error CS1010: Newline in constant [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(58,10): error CS1026: ) expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/Config/PluginConfiguration.cs(58,10): error CS1002: ; expected [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-    0 Warning(s)
-    15 Error(s)
+/home/runner/work/Gelato/Gelato/Common.cs(472,26): warning CS8601: Possible null reference assignment. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(777,17): error CS0246: The type or namespace name 'StremioTrailer' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(778,17): error CS0246: The type or namespace name 'StremioLink' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(809,17): error CS0246: The type or namespace name 'StremioTrailerStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(812,12): error CS0246: The type or namespace name 'StremioAppExtras' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(368,28): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(390,29): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(422,45): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+    1 Warning(s)
+    7 Error(s)
 
-Time Elapsed 00:00:02.42
+Time Elapsed 00:00:04.87
 ```
