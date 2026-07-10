@@ -943,10 +943,235 @@ public class StremioMeta
 
     public bool IsValid()
     {
+        return !Id.Contains("error");
+    }
+
+    public bool IsReleased(int bufferDays = 0)
+    {
+        var now = DateTime.UtcNow;
+
+        if (Type == StremioMediaType.Movie)
+        {
+            var digital = GetDigitalReleaseDate();
+            if (digital.HasValue)
+                return digital.Value.AddDays(bufferDays) <= now;
+
+            // Old media without a digital release date — if premiered > 1 year ago, treat as released.
+            if (Released.HasValue && Released.Value < now.AddYears(-1))
+                return true;
+        }
+
+        if (Released.HasValue)
+        {
+            return Released.Value.AddDays(bufferDays) <= now;
+        }
+
+        // Check FirstAired for TV episodes
+        if (FirstAired.HasValue)
+        {
+            return FirstAired.Value.AddDays(bufferDays) <= now;
+        }
+
+        if (Status is not null)
+        {
+            if (Status == StremioStatus.Upcoming)
+                return false;
+            if (Status == StremioStatus.Ended || Status == StremioStatus.Continuing)
+                return true;
+        }
+
+        // Fall back to year-based check
+        var year = GetYear();
+        if (year.HasValue)
+        {
+            var estimatedRelease = new DateTime(year.Value, 1, 1).AddDays(bufferDays);
+            return estimatedRelease <= now;
+        }
+
+        // If we have no release information, assume it's not released
+        return false;
+    }
+
+    public StremioStatus? GetStatus()
+    {
+        // Explicit status field takes priority
+        if (Status is not null and not StremioStatus.Unknown)
+            return Status;
+
+        // releaseInfo: "1994-" → continuing, "1994-2004" → ended, "2026" → unreleased
+        if (!string.IsNullOrWhiteSpace(ReleaseInfo))
+        {
+            var trimmed = ReleaseInfo.Trim();
+            if (trimmed.EndsWith('-'))
+                return StremioStatus.Continuing;
+            if (trimmed.Contains('-'))
+                return StremioStatus.Ended;
+            // Single year — fall through to episode check below
+        }
+
+        // Check S1E1: if it exists and hasn't been released yet → Upcoming
+        var s1e1 = Videos?.FirstOrDefault(v => v.Season == 1 && v.Episode == 1);
+        if (s1e1 is not null)
+        {
+            if (s1e1.Released.HasValue && s1e1.Released.Value > DateTime.UtcNow)
+                return StremioStatus.Upcoming;
+            if (s1e1.Released.HasValue)
+                return StremioStatus.Continuing;
+        }
+
+        // Single year in releaseInfo with no other signals → Upcoming
+        if (!string.IsNullOrWhiteSpace(ReleaseInfo) && !ReleaseInfo.Contains('-'))
+            return StremioStatus.Upcoming;
+
+        return null;
+    }
+}
+
+public class StremioTrailer
+{
+    public string? Source { get; set; }
+    public string? Type { get; set; }
+}
+
+public class StremioLink
+{
+    public string? Name { get; set; }
+    public string? Category { get; set; }
+    public string? Url { get; set; }
+}
+
+public class StremioVideo
+{
+    public string Id { get; set; } = "";
+    public string? Name { get; set; }
+    public DateTime? Released { get; set; }
+    public string? Thumbnail { get; set; }
+    public int? Episode { get; set; }
+    public int? Season { get; set; }
+    public string? Overview { get; set; }
+    public int? Number { get; set; }
+    public string? Description { get; set; }
+    public string? Rating { get; set; }
+    public DateTime? FirstAired { get; set; }
+}
+
+public class StremioTrailerStream
+{
+    public string? Title { get; set; }
+    public string? YtId { get; set; }
+}
+
+public class StremioAppExtras
+{
+    public List<StremioCast>? Cast { get; set; }
+    public List<StremioCast>? Directors { get; set; }
+    public List<StremioCast>? Writers { get; set; }
+    public string? Certification { get; set; }
+    public List<String?>? SeasonPosters { get; set; }
+
+    [JsonPropertyName("releaseDates")]
+    public TmdbReleaseDatesContainer? ReleaseDates { get; set; }
+}
+
+public class TmdbReleaseDatesContainer
+{
+    public List<TmdbReleaseDateCountry>? Results { get; set; }
+}
+
+public class TmdbReleaseDateCountry
+{
+    [JsonPropertyName("iso_3166_1")]
+    public string? Iso31661 { get; set; }
+
+    [JsonPropertyName("release_dates")]
+    public List<TmdbReleaseDateItem>? ReleaseDates { get; set; }
+}
+
+public class TmdbReleaseDateItem
+{
+    [JsonPropertyName("release_date")]
+    public DateTime? ReleaseDate { get; set; }
+
+    /// <summary>TMDB release type: 1=Premiere, 2=LimitedTheatrical, 3=Theatrical, 4=Digital, 5=Physical, 6=TV</summary>
+    public int Type { get; set; }
+
+    public string? Certification { get; set; }
+}
+
+public class StremioCast
+{
+    public string? Name { get; set; }
+    public string? Character { get; set; }
+    public string? Photo { get; set; }
+}
+
+public class StremioStreamsResponse
+{
+    public List<StremioStream> Streams { get; set; } = new();
+
+}
+
+public class StremioStream
+{
+    public string Url { get; set; } = "";
+    public string? Title { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public string? Quality { get; set; }
+    public string? Subtitle { get; set; }
+    public string? Audio { get; set; }
+    public string? InfoHash { get; set; }
+    public int? FileIdx { get; set; }
+    public List<string>? Sources { get; set; }
+    public StremioBehaviorHints? BehaviorHints { get; set; }
+
+    public string GetName()
+    {
+        if (!string.IsNullOrWhiteSpace(Title))
+        {
+            return Title;
+        }
+        return !string.IsNullOrWhiteSpace(Name) ? Name : "";
+    }
+
+    public Guid GetGuid()
+    {
+        string key;
+
+        // Prefer URL identity when a direct URL exists, even if InfoHash is present.
+        // Some providers attach the same InfoHash to multiple hosters (e.g. Dropload/SuperVideo).
+        if (!string.IsNullOrEmpty(Url))
+        {
+            key = Url;
+        }
+        else if (!string.IsNullOrEmpty(InfoHash))
+        {
+            key = InfoHash;
+        }
+        else if (
+            !string.IsNullOrEmpty(BehaviorHints?.BingeGroup)
+            && !string.IsNullOrEmpty(BehaviorHints?.Filename)
+        )
+        {
+            key = $"{BehaviorHints?.BingeGroup}{BehaviorHints?.Filename}";
+        }
+        else
+        {
+            throw new Exception("Cannot build guid for stream");
+        }
+
+        var bytes = System.Text.Encoding.UTF8.GetBytes(key);
+        var hash = System.Security.Cryptography.MD5.HashData(bytes);
+        return new Guid(hash);
+    }
+
+    public bool IsValid()
+    {
         if (!string.IsNullOrWhiteSpace(Url))
         {
             if (!Uri.TryCreate(Url, UriKind.Absolute, out var uri))
                 return false;
+
             return !(uri.PathAndQuery == "/" || string.IsNullOrEmpty(uri.PathAndQuery));
         }
 
