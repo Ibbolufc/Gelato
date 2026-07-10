@@ -1,4 +1,4 @@
-name: Verify multi-addon build
+name: Repair and verify multi-addon build
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  verify:
+  repair-and-verify:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,13 +21,79 @@ jobs:
           ref: agent/multi-addon-support
           fetch-depth: 0
 
+      - name: Restore Stremio model block and patch stream validation
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess
+
+          path = Path("GelatoStremioProvider.cs")
+          current = path.read_text(encoding="utf-8")
+          original = subprocess.check_output(
+              ["git", "show", "origin/main:GelatoStremioProvider.cs"],
+              text=True,
+          )
+
+          marker_start = "public class StremioMeta"
+          marker_end = "public class StremioBehaviorHints"
+
+          original_start = original.index(marker_start)
+          original_end = original.index(marker_end)
+          restored = original[original_start:original_end]
+
+          old_validation = '''    public bool IsValid()
+              {
+                  if (string.IsNullOrWhiteSpace(Url))
+                      return false;
+
+                  if (!Uri.TryCreate(Url, UriKind.Absolute, out var uri))
+                      return false;
+
+                  return !(uri.PathAndQuery == "/" || string.IsNullOrEmpty(uri.PathAndQuery));
+              }
+
+              public bool IsFile()'''
+
+          new_validation = '''    public bool IsValid()
+              {
+                  if (!string.IsNullOrWhiteSpace(Url))
+                  {
+                      if (!Uri.TryCreate(Url, UriKind.Absolute, out var uri))
+                          return false;
+
+                      return !(uri.PathAndQuery == "/" || string.IsNullOrEmpty(uri.PathAndQuery));
+                  }
+
+                  return !string.IsNullOrWhiteSpace(InfoHash);
+              }
+
+              public bool IsFile()'''
+
+          if old_validation not in restored:
+              raise RuntimeError("Could not find StremioStream.IsValid in the original model block")
+          restored = restored.replace(old_validation, new_validation, 1)
+
+          current_start = current.index(marker_start)
+          current_end = current.index(marker_end)
+          repaired = current[:current_start] + restored + current[current_end:]
+          path.write_text(repaired, encoding="utf-8")
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add GelatoStremioProvider.cs
+          if ! git diff --cached --quiet; then
+            git commit -m "Restore Stremio models and scope stream validation"
+            git push origin HEAD:agent/multi-addon-support
+          fi
+
       - name: Set up .NET 9
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
 
       - name: Restore and build
-        id: build
         shell: bash
         run: |
           set +e
@@ -64,5 +130,3 @@ jobs:
           git push origin HEAD:agent/multi-addon-support
 
           exit "$result"
-
-# Retry after fixing escaped newline handling.
