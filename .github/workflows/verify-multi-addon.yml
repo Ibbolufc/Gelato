@@ -64,3 +64,5 @@ jobs:
           git push origin HEAD:agent/multi-addon-support
 
           exit "$result"
+
+# Retry after fixing escaped newline handling.
