@@ -1,0 +1,63 @@
+name: Apply multi-addon fork
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/multi-addon-support
+    paths:
+      - tools/Gelato-Universal-MultiAddon-MVP.zip.b64
+      - .github/workflows/apply-multi-addon.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out development branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/multi-addon-support
+          fetch-depth: 0
+
+      - name: Decode transformation bundle
+        shell: bash
+        run: |
+          base64 --decode tools/Gelato-Universal-MultiAddon-MVP.zip.b64 > /tmp/gelato-multi-addon.zip
+          unzip -q /tmp/gelato-multi-addon.zip -d /tmp/gelato-multi-addon
+
+      - name: Apply multi-addon changes
+        run: python3 /tmp/gelato-multi-addon/Gelato-Universal-MultiAddon/apply_multi_addon_fork.py
+
+      - name: Commit generated source changes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            GelatoStremioProvider.cs \
+            Config/PluginConfiguration.cs \
+            Config/config.html \
+            README.md \
+            MULTI_ADDON.md
+
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+          else
+            git commit -m "Add standard Stremio multi-addon support"
+            git push origin HEAD:agent/multi-addon-support
+          fi
+
+      - name: Set up .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore Gelato.csproj
+
+      - name: Build plugin
+        run: dotnet build Gelato.csproj --configuration Release --no-restore
