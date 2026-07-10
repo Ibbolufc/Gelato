@@ -2,32 +2,66 @@
 
 Status: **FAILED**
 
-Commit tested: `9f32df29af5b4f8a0550c9be451084d0234772b5`
+Commit tested: `5f034f691c3c4398ceaab17127cab3ed5801753f`
 
 ```text
   Determining projects to restore...
-  Restored /home/runner/work/Gelato/Gelato/Gelato.csproj (in 2.65 sec).
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(777,17): error CS0246: The type or namespace name 'StremioTrailer' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(778,17): error CS0246: The type or namespace name 'StremioLink' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+  Restored /home/runner/work/Gelato/Gelato/Gelato.csproj (in 2.5 sec).
 /home/runner/work/Gelato/Gelato/Common.cs(472,26): warning CS8601: Possible null reference assignment. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(809,17): error CS0246: The type or namespace name 'StremioTrailerStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(812,12): error CS0246: The type or namespace name 'StremioAppExtras' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(368,28): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(390,29): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(422,45): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Common.cs(361,17): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Controllers/CatalogController.cs(20,21): warning CS9113: Parameter 'libraryManager' is unread. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Controllers/PalcoCacheController.cs(118,33): warning CS8604: Possible null reference argument for parameter 'address' in 'MailAddress.MailAddress(string address, string? displayName)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Controllers/GelatoApiController.cs(43,26): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Services/CatalogImportService.cs(78,34): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Controllers/GelatoApiController.cs(151,28): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/PlaylistManagerDecorator.cs(15,25): warning CS9113: Parameter 'manager' is unread. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/MediaSourceManagerDecorator.cs(86,13): warning CS8604: Possible null reference argument for parameter 'ctx' in 'bool ActionContextExtensions.TryGetUserId(HttpContext ctx, out Guid userId)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/MediaSourceManagerDecorator.cs(102,25): warning CS8604: Possible null reference argument for parameter 'ctx' in 'bool ActionContextExtensions.IsInsertableAction(HttpContext ctx)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/MediaSourceManagerDecorator.cs(214,34): warning CS8604: Possible null reference argument for parameter 'value' in 'void Dictionary<string, string>.Add(string key, string value)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/CollectionManagerDecorator.cs(14,25): warning CS9113: Parameter 'manager' is unread. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/MediaSourceManagerDecorator.cs(392,13): warning CS8604: Possible null reference argument for parameter 'ctx' in 'string? ActionContextExtensions.GetActionName(HttpContext ctx)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Filters/SearchActionFilter.cs(31,23): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Filters/SearchActionFilter.cs(129,23): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Filters/SearchActionFilter.cs(140,23): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Filters/SearchActionFilter.cs(178,22): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Filters/InsertActionFilter.cs(79,26): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoManager.cs(230,20): warning CS8600: Converting null literal or possible null value to non-nullable type. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(452,40): error CS0023: Operator '?' cannot be applied to operand of type 'StremioSubtitleResponse' [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoManager.cs(415,29): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoManager.cs(483,24): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoManager.cs(519,13): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Plugin.cs(97,56): warning CS8604: Possible null reference argument for parameter 'baseConfig' in 'PluginConfiguration UserConfig.ApplyOverrides(PluginConfiguration baseConfig)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Plugin.cs(100,58): warning CS8604: Possible null reference argument for parameter 'cfg' in 'GelatoStremioProvider GelatoStremioProviderFactory.Create(PluginConfiguration cfg)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
 
 Build FAILED.
 
 /home/runner/work/Gelato/Gelato/Common.cs(472,26): warning CS8601: Possible null reference assignment. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(777,17): error CS0246: The type or namespace name 'StremioTrailer' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(778,17): error CS0246: The type or namespace name 'StremioLink' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(809,17): error CS0246: The type or namespace name 'StremioTrailerStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(812,12): error CS0246: The type or namespace name 'StremioAppExtras' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(368,28): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(390,29): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(422,45): error CS0246: The type or namespace name 'StremioStream' could not be found (are you missing a using directive or an assembly reference?) [/home/runner/work/Gelato/Gelato/Gelato.csproj]
-    1 Warning(s)
-    7 Error(s)
+/home/runner/work/Gelato/Gelato/Common.cs(361,17): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Controllers/CatalogController.cs(20,21): warning CS9113: Parameter 'libraryManager' is unread. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Controllers/PalcoCacheController.cs(118,33): warning CS8604: Possible null reference argument for parameter 'address' in 'MailAddress.MailAddress(string address, string? displayName)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Controllers/GelatoApiController.cs(43,26): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Services/CatalogImportService.cs(78,34): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Controllers/GelatoApiController.cs(151,28): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/PlaylistManagerDecorator.cs(15,25): warning CS9113: Parameter 'manager' is unread. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/MediaSourceManagerDecorator.cs(86,13): warning CS8604: Possible null reference argument for parameter 'ctx' in 'bool ActionContextExtensions.TryGetUserId(HttpContext ctx, out Guid userId)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/MediaSourceManagerDecorator.cs(102,25): warning CS8604: Possible null reference argument for parameter 'ctx' in 'bool ActionContextExtensions.IsInsertableAction(HttpContext ctx)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/MediaSourceManagerDecorator.cs(214,34): warning CS8604: Possible null reference argument for parameter 'value' in 'void Dictionary<string, string>.Add(string key, string value)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/CollectionManagerDecorator.cs(14,25): warning CS9113: Parameter 'manager' is unread. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Decorators/MediaSourceManagerDecorator.cs(392,13): warning CS8604: Possible null reference argument for parameter 'ctx' in 'string? ActionContextExtensions.GetActionName(HttpContext ctx)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Filters/SearchActionFilter.cs(31,23): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Filters/SearchActionFilter.cs(129,23): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Filters/SearchActionFilter.cs(140,23): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Filters/SearchActionFilter.cs(178,22): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Filters/InsertActionFilter.cs(79,26): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoManager.cs(230,20): warning CS8600: Converting null literal or possible null value to non-nullable type. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoManager.cs(415,29): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoManager.cs(483,24): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoManager.cs(519,13): warning CS8602: Dereference of a possibly null reference. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Plugin.cs(97,56): warning CS8604: Possible null reference argument for parameter 'baseConfig' in 'PluginConfiguration UserConfig.ApplyOverrides(PluginConfiguration baseConfig)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/Plugin.cs(100,58): warning CS8604: Possible null reference argument for parameter 'cfg' in 'GelatoStremioProvider GelatoStremioProviderFactory.Create(PluginConfiguration cfg)'. [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+/home/runner/work/Gelato/Gelato/GelatoStremioProvider.cs(452,40): error CS0023: Operator '?' cannot be applied to operand of type 'StremioSubtitleResponse' [/home/runner/work/Gelato/Gelato/Gelato.csproj]
+    24 Warning(s)
+    1 Error(s)
 
-Time Elapsed 00:00:04.87
+Time Elapsed 00:00:07.78
 ```
