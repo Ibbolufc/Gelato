@@ -449,7 +449,7 @@ public class GelatoStremioProvider(
                         );
                         var response = await GetJsonAsync<StremioSubtitleResponse>(addon, url)
                             .ConfigureAwait(false);
-                        return response?.Subtitles ?? [];
+                        return response.Subtitles ?? [];
                     }
                     catch (Exception ex)
                     {
