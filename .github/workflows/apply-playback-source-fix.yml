@@ -1,12 +1,13 @@
-# Merge this branch into main to run the repair automatically.
 name: Apply Playback Source Fix
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-    paths:
-      - .github/workflows/apply-playback-source-fix.yml
+    types:
+      - opened
+      - reopened
+      - synchronize
 
 permissions:
   contents: write
@@ -22,6 +23,8 @@ jobs:
     steps:
       - name: Check out main
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Fix Gelato virtual source selection and bump version
         shell: bash
