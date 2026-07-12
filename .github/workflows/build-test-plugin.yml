@@ -11,15 +11,16 @@ on:
       - Gelato.csproj
       - build.yaml
       - README.md
+      - scripts/**
       - .github/workflows/build-test-plugin.yml
 
 permissions:
   contents: write
 
 env:
-  PLUGIN_VERSION: "0.26.15.2"
+  PLUGIN_VERSION: "0.26.15.3"
   TARGET_ABI: "10.11.6.0"
-  PACKAGE_NAME: "gelato_0.26.15.2.zip"
+  PACKAGE_NAME: "gelato_0.26.15.3.zip"
 
 jobs:
   build-and-publish:
@@ -83,7 +84,7 @@ jobs:
                   "owner": "Ibbolufc",
                   "versions": [
                       {
-                          "changelog": "Initial multi-addon test build. Supports separate metadata, stream and subtitle addons without requiring AIOStreams.",
+                          "changelog": "Fix playback selecting the virtual .strm placeholder instead of the real addon stream.",
                           "checksum": checksum,
                           "sourceUrl": f"https://raw.githubusercontent.com/Ibbolufc/Gelato/gh-pages/{package_name}",
                           "targetAbi": target_abi,
@@ -102,8 +103,8 @@ jobs:
       - name: Upload test ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: Gelato-Universal-0.26.15.2
-          path: publish/gelato_0.26.15.2.zip
+          name: Gelato-Universal-0.26.15.3
+          path: publish/gelato_0.26.15.3.zip
           if-no-files-found: error
           retention-days: 30
 

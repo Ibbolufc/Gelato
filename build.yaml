@@ -1,7 +1,7 @@
 ---
 name: "Gelato Universal"
 guid: "94EA4E14-8163-4989-96FE-0A2094BC2D6A"
-version: "0.26.15.2"
+version: "0.26.15.3"
 targetAbi: "10.11.6.0"
 framework: "net9.0"
 owner: "Ibbolufc"
@@ -25,4 +25,4 @@ description: >
   Jellyfin integration for multiple ordinary Stremio metadata, stream and subtitle addons. AIOStreams is optional.
 category: "General"
 changelog: >
-  Initial multi-addon test build.
+  Fix playback selecting the virtual .strm placeholder instead of the real addon stream.

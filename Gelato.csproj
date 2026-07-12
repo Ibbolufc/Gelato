@@ -4,7 +4,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>Gelato</AssemblyName>
-    <Version>0.26.15.2</Version>
+    <Version>0.26.15.3</Version>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -23,6 +23,9 @@
     <!-- Embed all frontend assets so they are delivered with the plugin -->
     <EmbeddedResource Include="Frontend\**\*" />
   </ItemGroup>
+  <Target Name="PatchPlaybackSourceSelection" BeforeTargets="CoreCompile" Condition="'$(OS)' != 'Windows_NT'">
+    <Exec Command="python3 scripts/patch_playback_source.py" />
+  </Target>
   <Target Name="CleanupJellyfinDlls" AfterTargets="Build">
     <ItemGroup>
       <AllDlls Include="$(OutDir)*.dll" />
