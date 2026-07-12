@@ -1,0 +1,20 @@
+[
+  {
+    "category": "General",
+    "description": "Jellyfin integration for multiple standard Stremio addons.",
+    "guid": "94EA4E14-8163-4989-96FE-0A2094BC2D6A",
+    "name": "Gelato Universal",
+    "overview": "Use standard Stremio addons directly in Jellyfin.",
+    "owner": "Ibbolufc",
+    "versions": [
+      {
+        "changelog": "Fix playback selecting the virtual .strm placeholder instead of the real addon stream.",
+        "checksum": "055dfd915f4ceccea11530a0c3dcc30b",
+        "sourceUrl": "https://raw.githubusercontent.com/Ibbolufc/Gelato/gh-pages/gelato_0.26.15.3.zip",
+        "targetAbi": "10.11.6.0",
+        "timestamp": "2026-07-12T09:31:03Z",
+        "version": "0.26.15.3"
+      }
+    ]
+  }
+]
