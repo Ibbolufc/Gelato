@@ -1,7 +1,11 @@
 name: Apply Playback Source Fix
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/apply-playback-source-fix.yml
 
 permissions:
   contents: write
