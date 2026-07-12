@@ -1,3 +1,4 @@
+# Merge this branch into main to run the repair automatically.
 name: Apply Playback Source Fix
 
 on:
